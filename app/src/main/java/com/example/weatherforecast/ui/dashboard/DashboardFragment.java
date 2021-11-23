@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.weatherforecast.R;
+import com.example.weatherapplication.R;
 
 
 public class DashboardFragment extends Fragment {

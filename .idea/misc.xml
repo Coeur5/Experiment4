@@ -5,6 +5,9 @@
       <map>
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/activity_weather.xml" value="0.1802536231884058" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/choose_area.xml" value="0.12132725430597771" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/fragment_dashboard.xml" value="0.14764492753623187" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/fragment_home.xml" value="0.16666666666666666" />
       </map>
     </option>
   </component>

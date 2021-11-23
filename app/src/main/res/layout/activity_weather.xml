@@ -13,7 +13,7 @@
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"/>
     <!--SwipRefreshLayout是一款下拉刷新控件。 -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -80,7 +80,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     <fragment
         android:id="@+id/choose_area_fragment"
-        android:name="com.example.weatherforecast.ChooseAreaFragment"
+        android:name="com.example.weatherapplication.ChooseAreaFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"/>
