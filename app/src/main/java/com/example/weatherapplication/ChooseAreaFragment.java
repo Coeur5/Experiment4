@@ -29,6 +29,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
+
 public class ChooseAreaFragment extends Fragment {
     private static final int LEVEL_PROVINCE = 0;//省级别
     private static final int LEVEL_CITY = 1;//市级别

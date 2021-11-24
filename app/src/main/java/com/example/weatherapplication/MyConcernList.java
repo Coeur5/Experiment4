@@ -1,5 +1,7 @@
 package com.example.weatherapplication;
 
+import static com.example.weatherapplication.MyDBhelper.DB_NAME;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;

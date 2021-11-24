@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 
-import com.example.weatherforecast.R;
+import com.example.weatherapplication.R;
 
 public class HomeFragment extends Fragment{
     private HomeViewModel homeViewModel;
