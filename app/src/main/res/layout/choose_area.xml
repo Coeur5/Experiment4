@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
-    android:orientation="vertical">
+    android:background="#DDEFE3"
+    android:fitsSystemWindows="true">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary">
+        android:background="#377375">
 
         <TextView
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="#fff"
             android:layout_centerInParent="true"
+            android:textColor="#fff"
             android:textSize="20sp"/>
 
         <Button
@@ -24,41 +27,12 @@
             android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_home_black_24dp"/>
+            android:background="@drawable/ic_back"/>
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <EditText
-            android:id="@+id/chengshi_text"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:inputType="number"/>
-        <!--只能输入数字-->
-        <Button
-            android:id="@+id/search_button"
-            android:text="查询"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/concern_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="我的关注" />
-    </LinearLayout>
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-
 
 </LinearLayout>
