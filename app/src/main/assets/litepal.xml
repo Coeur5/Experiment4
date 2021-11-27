@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+
+    <dbname value="weather" />
+
+    <version value="1" />
+
+    <list>
+        <mapping class="" />
+        <mapping class="" />
+        <mapping class="" />
+    </list>
+
+</litepal>
