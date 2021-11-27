@@ -1,22 +1,29 @@
-package com.example.weatherapplication;
+package com.example.weatherforecast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.weatherforecast.MyConcernList;
+import com.example.weatherforecast.R;
+import com.example.weatherforecast.WeatherActivity;
+
 public class MainActivity extends AppCompatActivity {
     private Button searchButton;//查找按钮
     private EditText chengShi;//通过城市查询天气
     private Button myConcern;//关注按钮
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         chengShi = findViewById(R.id.chengshi_text);
         searchButton = findViewById(R.id.search_button);
         myConcern = findViewById(R.id.concern_text);
@@ -44,5 +51,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        SharedPreferences pres = getSharedPreferences(String.valueOf(this),MODE_PRIVATE);
+        //先从SharedPreferences里读取数据
+        if (pres.getString("weather",null)!= null){
+            Intent intent = new Intent(this,WeatherActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

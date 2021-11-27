@@ -1,4 +1,4 @@
-package com.example.weatherapplication;
+package com.example.weatherforecast;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.weatherforecast.MainActivity;
+import com.example.weatherforecast.MyConcernList;
+import com.example.weatherforecast.R;
+import com.example.weatherforecast.WeatherActivity;
 import com.example.weatherforecast.db.City;
 import com.example.weatherforecast.db.County;
 import com.example.weatherforecast.db.Province;
@@ -43,6 +48,8 @@ public class ChooseAreaFragment extends Fragment {
     private Button backButton;//返回按钮
     private Button concernButton;//关注按钮
     private ListView listView;//列表
+    private Button searchButton;//查询按钮
+    private EditText chengShi;
 
 
     private List<Province> provinceList;//省列表
@@ -60,6 +67,8 @@ public class ChooseAreaFragment extends Fragment {
         backButton = view.findViewById(R.id.back_button);
         concernButton=view.findViewById(R.id.concern_text);
         listView = view.findViewById(R.id.list_view);
+        searchButton=view.findViewById(R.id.search_button);
+        chengShi=view.findViewById(R.id.chengshi_text);
 
         adapter = new ArrayAdapter<>(getContext(),android.R.layout.simple_list_item_1,dataList);
         //listview适配器，simple_list_item_1 android自带，datalist为listview要显示的内容
@@ -101,7 +110,7 @@ public class ChooseAreaFragment extends Fragment {
                         startActivity(intent);
                         getActivity().finish();//关闭当前activity
                     } else if (getActivity() instanceof WeatherActivity) {
-                        //在WeatherActivity活动中
+                        //在WeatherActivity活动中  左侧碎片调用
                         WeatherActivity activity = (WeatherActivity) getActivity();
                         activity.drawerLayout.closeDrawers();
                         //关闭滑动菜单
@@ -109,6 +118,7 @@ public class ChooseAreaFragment extends Fragment {
                         //下拉刷新进度条
                         activity.requestWeather(countyCode);
                         //调用WeatherActivity的requestWeather方法 传递县编码作为参数 查找天气情况
+                        activity.requestfutureWeather(countyCode);
                     }
                 }
             }
@@ -127,14 +137,30 @@ public class ChooseAreaFragment extends Fragment {
                 }
             }
         });
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            //查找按钮监听
+            @Override
+            public void onClick(View v) {
+                String searchCountyCode = String.valueOf(chengShi.getText());//获取输入内容
+                if(searchCountyCode.length() != 6){
+                    //输入内容不等于6
+                    Toast.makeText(getActivity(),"城市ID长度为6位!",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                    intent.putExtra("adcode",searchCountyCode);
+                    //传递adcode到WeatherActivity
+                    startActivity(intent);
+                }
+            }
+        });
         concernButton.setOnClickListener(new View.OnClickListener(){
+            //关注按钮
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(),MyConcernList.class);
                 startActivity(intent);
             }
         });
-
         queryProvinces();
     }
 
@@ -147,7 +173,7 @@ public class ChooseAreaFragment extends Fragment {
         titleText.setText("中国");
         backButton.setVisibility(View.GONE);
         // 省级为最底层，无法再次返回 View.GONE是不可见的，不占用原来的布局空间
-        provinceList = LitePal.findAll(Province.class);//获取省数据，放入列表哦
+        provinceList = LitePal.findAll(Province.class);//获取省数据，放入列表
         if (provinceList.size()>0){
             //如果列表大于0
             dataList.clear();//清空数据列表
@@ -169,20 +195,23 @@ public class ChooseAreaFragment extends Fragment {
      * 查询选中省内所有的市，优先从数据库查询，如果没有查询到再去服务器上查询。
      */
     private void queryCities() {
-        titleText.setText(selectedProvince.getProvinceName());
+        titleText.setText(selectedProvince.getProvinceName());//获取省名
         backButton.setVisibility(View.VISIBLE);
         //VISIBLE:0  意思是可见的
         cityList = LitePal.where("provinceCode = ?",
                 String.valueOf(selectedProvince.getProvinceCode())).find(City.class);
+        //根据省编码查询
+        //数据库查询
         if (cityList.size()>0){
             dataList.clear();
             for (City city : cityList){
-                dataList.add(city.getCityName());
+                dataList.add(city.getCityName());//添加城市名字
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
-            currentLevel = LEVEL_CITY;
+            currentLevel = LEVEL_CITY;//设置当前登记为市级
         }else {
+            //如果不再数据库里则使用api访问
             String provinceName = selectedProvince.getProvinceName();
             String address = "https://restapi.amap.com/v3/config/district?keywords="+provinceName+"&subdistrict=1&key=c1894e9fcaf35e9fceabe9afaf40d45f";
             queryFromServer(address,"city");
@@ -204,8 +233,9 @@ public class ChooseAreaFragment extends Fragment {
             }
             adapter.notifyDataSetChanged();
             listView.setSelection(0);
-            currentLevel = LEVEL_COUNTY;
+            currentLevel = LEVEL_COUNTY;//设置当前登记为县级
         }else{
+            //如果不再数据库里则使用api访问
             String cityName = selectedCity.getCityName();
             String address = "https://restapi.amap.com/v3/config/district?keywords="+cityName+"&subdistrict=1&key=c1894e9fcaf35e9fceabe9afaf40d45f";
             queryFromServer(address,"county");
@@ -260,5 +290,4 @@ public class ChooseAreaFragment extends Fragment {
             }
         });
     }
-
 }

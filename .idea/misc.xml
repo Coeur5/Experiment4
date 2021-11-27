@@ -4,17 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.24537037037037038" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.4" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.1" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.24537037037037038" />
-        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/activity_weather.xml" value="0.2" />
-        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/choose_area.xml" value="0.536" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/choose_area.xml" value="0.264" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/forecast.xml" value="0.23802083333333332" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/forecast_item.xml" value="0.23802083333333332" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/fragment_dashboard.xml" value="0.14764492753623187" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/fragment_home.xml" value="0.11200000000000002" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/fragment_notifications.xml" value="0.15489130434782608" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/future.xml" value="0.11727456940222898" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/future_item.xml" value="0.11727456940222898" />
         <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/myconcern_list.xml" value="0.6" />
-        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/title.xml" value="0.23802083333333332" />
+        <entry key="..\:/Android Workplace/WeatherApplication/app/src/main/res/layout/title.xml" value="0.8" />
       </map>
     </option>
   </component>

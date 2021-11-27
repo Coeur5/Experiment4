@@ -1,6 +1,6 @@
-package com.example.weatherapplication;
+package com.example.weatherforecast;
 
-import static com.example.weatherapplication.MyDBhelper.DB_NAME;
+import static com.example.weatherforecast.MyDBhelper.DB_NAME;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -12,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.weatherforecast.MyDBhelper;
+import com.example.weatherforecast.R;
+import com.example.weatherforecast.WeatherActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,5 +86,6 @@ public class MyConcernList extends AppCompatActivity {
         });
 
     }
+
 
 }

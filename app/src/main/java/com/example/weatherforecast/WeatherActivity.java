@@ -1,7 +1,7 @@
-package com.example.weatherapplication;
+package com.example.weatherforecast;
 
-import static com.example.weatherapplication.MyDBhelper.DB_NAME;
-import static com.example.weatherapplication.MyDBhelper.TABLE_NAME;
+import static com.example.weatherforecast.MyDBhelper.DB_NAME;
+import static com.example.weatherforecast.MyDBhelper.TABLE_NAME;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
@@ -11,10 +11,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.preference.PreferenceManager;
+import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,11 +27,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.weatherforecast.R;
+import com.example.weatherforecast.gson.Future;
 import com.example.weatherforecast.gson.Weather;
 import com.example.weatherforecast.util.HttpUtil;
 import com.example.weatherforecast.util.Utility;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -53,6 +58,7 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView humidityText;//湿度
     private TextView reportTimeText;//时间
     private TextView winddirection;//风向
+    private LinearLayout futureLayout;//未来天气
 
     String countyCode;//县编码
     String countyName;//县名
@@ -86,6 +92,7 @@ public class WeatherActivity extends AppCompatActivity {
         concealConcern = findViewById(R.id.concealConcern);
         goBack = findViewById(R.id.goBack);
         refresh = findViewById(R.id.refresh);
+        futureLayout=(LinearLayout)findViewById(R.id.future_layout);
 
         SharedPreferences prefs = getSharedPreferences(String.valueOf(this),MODE_PRIVATE);
         String adcodeString = prefs.getString("weather",null);
@@ -103,8 +110,10 @@ public class WeatherActivity extends AppCompatActivity {
             //countyName = getIntent().getStringExtra("city");
             weatherLayout.setVisibility(View.INVISIBLE);
             //View.INVISIBLE--->不可见，但这个View仍然会占用在xml文件中所分配的布局空间，不重新layout
+            futureLayout.setVisibility(View.INVISIBLE);
             requestWeather(countyCode);
             //获取县天气
+            requestfutureWeather(countyCode);
         }
         final String x = cityText.getText().toString();
         //获取当前位置
@@ -142,7 +151,7 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MyDBhelper dbHelper = new MyDBhelper(WeatherActivity.this, DB_NAME, null, 1);
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+                SQLiteDatabase db = dbHelper.getWritableDatabase();//以写的方式打开数据库
                 db.delete(TABLE_NAME,"city_code=?",new String[]{String.valueOf(countyCode)});
                 //按编码筛选条件删除
                 Toast.makeText(WeatherActivity.this, "取消关注成功！", Toast.LENGTH_LONG).show();
@@ -162,7 +171,8 @@ public class WeatherActivity extends AppCompatActivity {
             //刷新按钮监听
             @Override
             public void onClick(View v) {
-                requestWeather(countyCode);
+                requestWeather(countyCode);//调用天气请求
+                requestfutureWeather(countyCode);//调用未来天气请求
             }
         });
         String bingPic = prefs.getString("bing_pic",null);
@@ -190,7 +200,8 @@ public class WeatherActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (weather != null) {
-                            countyName=weather.cityName;
+                            countyName=weather.cityName;//放入城市名
+                            countyCode=adCode;//放入城市编码
                             SharedPreferences.Editor editor = getSharedPreferences(String.valueOf(this),MODE_PRIVATE).edit();
                             editor.putString("weather", responseText);//放入数据
                             editor.apply();//提交数据
@@ -220,6 +231,53 @@ public class WeatherActivity extends AppCompatActivity {
         });
         loadBingPic();
     }
+    /*询问未来天气*/
+    public void requestfutureWeather(final String adCode){
+        //请求获取天气信息
+        String weatherUrl = "https://restapi.amap.com/v3/weather/weatherInfo?city=" + adCode + "&extensions=all&key=c1894e9fcaf35e9fceabe9afaf40d45f";
+        HttpUtil.sendOkHttpRequest(weatherUrl, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                //响应
+                final String responseText = response.body().string();
+                //获取网页响应的主体
+                final List<Future> futureweather = Utility.handleFutureWeatherResponse(responseText);
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (futureweather != null) {
+                            //countyName=futureweather.cityName;
+                            countyCode=adCode;
+                            SharedPreferences.Editor editor = getSharedPreferences(String.valueOf(this),MODE_PRIVATE).edit();
+                            editor.putString("futureweather", responseText);//放入数据
+                            editor.apply();//提交数据
+                            showWeatherInfo1(futureweather);//显示响应返回信息
+                        } else {
+                            Toast.makeText(WeatherActivity.this, "获取天气信息失败,城市ID不存在，请重新输入！", Toast.LENGTH_SHORT).show();
+                        }
+                        swipeRefresh.setRefreshing(false);
+                        //取消动画就调用setRefreshing（false）
+                    }
+                });
+
+            }
+            @Override
+            public void onFailure(Call call, IOException e) {
+                //获取天气信息失败，抛出异常
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(WeatherActivity.this, "获取未来天气信息失败", Toast.LENGTH_SHORT).show();
+                        swipeRefresh.setRefreshing(false);
+                    }
+                });
+            }
+        });
+        loadBingPic();
+
+    }
 
     private void loadBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";//图片下载地址
@@ -229,7 +287,6 @@ public class WeatherActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             //获取失败 抛出异常
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPic = response.body().string();
@@ -262,6 +319,27 @@ public class WeatherActivity extends AppCompatActivity {
         winddirection.setText("风向:"+winddirectionName);
         reportTimeText.setText(reportTime);
         weatherLayout.setVisibility(View.VISIBLE);
-    }
 
+    }
+    /*显示未来天气*/
+    private void showWeatherInfo1(List<Future> futureweather){
+        futureLayout.removeAllViews();//清除存储原有的查询结果的组件
+
+        for(Future future:futureweather){
+            View view= LayoutInflater.from(this).inflate(R.layout.future_item,futureLayout,false);
+            //inflate这个函数的返回值就是获取的布局文件,将future_item放入futureLayout显示
+            TextView dateText=(TextView)view.findViewById(R.id.future_date);
+            TextView dayweatherText=(TextView)view.findViewById(R.id.future_dayweather);
+            TextView daytempText=(TextView)view.findViewById(R.id.future_daytemp);
+            TextView nighttempText=(TextView)view.findViewById(R.id.future_nighttemp);
+
+            dateText.setText(future.date);//时间
+            dayweatherText.setText(future.dayweather);//天气情况
+            daytempText.setText(future.daytemp+"℃");//日间温度
+            nighttempText.setText(future.nighttemp+"℃");//夜间温度
+            futureLayout.addView(view);
+            futureLayout.setVisibility(View.VISIBLE);
+            //View.VISIBLE显示
+        }
+    }
 }

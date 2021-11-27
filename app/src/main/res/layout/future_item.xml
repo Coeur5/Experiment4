@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="35dp"
+    android:layout_height="wrap_content"
     android:layout_margin="15dp">
     <TextView
-        android:id="@+id/weather_text"
+        android:id="@+id/future_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:layout_gravity="center_vertical"
+        android:textColor="#fff"
+        android:textSize="18dp"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/future_dayweather"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -14,17 +24,7 @@
         android:gravity="center"/>
 
     <TextView
-        android:id="@+id/temperature_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
-        android:textColor="#fff"
-        android:textSize="18dp"
-        android:gravity="center"/>
-
-    <TextView
-        android:id="@+id/humidity_text"
+        android:id="@+id/future_daytemp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -33,7 +33,7 @@
         android:textSize="18dp"
         android:gravity="center"/>
     <TextView
-        android:id="@+id/winddirection_text"
+        android:id="@+id/future_nighttemp"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -41,6 +41,5 @@
         android:textColor="#fff"
         android:textSize="18dp"
         android:gravity="center"/>
-
 
 </LinearLayout>

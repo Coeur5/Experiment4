@@ -1,6 +1,7 @@
 package com.example.weatherforecast.util;
 import android.text.TextUtils;
 
+import com.example.weatherforecast.gson.Future;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -11,6 +12,9 @@ import com.example.weatherforecast.db.City;
 import com.example.weatherforecast.db.County;
 import com.example.weatherforecast.db.Province;
 import com.example.weatherforecast.gson.Weather;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Utility {
@@ -112,7 +116,7 @@ public class Utility {
         try {
             JSONObject jsonObject = new JSONObject(response);
             //JSONObject只是一种数据结构，可以理解为JSON格式的数据结构（key-value 结构）
-            JSONArray jsonArray = jsonObject.getJSONArray("lives");
+            JSONArray jsonArray = jsonObject.getJSONArray("lives");//将网页里lives的数据取出来
             //json数组，使用中括号[ ],只不过数组里面的项也是json键值对格式的
             for(int i=0; i<jsonArray.length(); i++){
                 JSONObject x = jsonArray.getJSONObject(i);
@@ -124,6 +128,28 @@ public class Utility {
             e.printStackTrace();
         }
         return null;
+    }
+    public static List<Future> handleFutureWeatherResponse(String response) {
+        List<Future> futureList =new ArrayList<Future>();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            //JSONObject只是一种数据结构，可以理解为JSON格式的数据结构（key-value 结构）
+            JSONArray jsonArray = jsonObject.getJSONArray("forecasts");
+            JSONObject getJsonObj = jsonArray.getJSONObject(0);//获取json数组中的第一项
+            JSONArray jsonArray1=getJsonObj.getJSONArray("casts");
+
+            //json数组，使用中括号[ ],只不过数组里面的项也是json键值对格式的
+            for(int i=0; i<jsonArray1.length(); i++) {
+                JSONObject x = jsonArray1.getJSONObject(i);
+                String FutureweatherContent = x.toString();//获取json字符串*/
+                Future future=new Gson().fromJson(FutureweatherContent, Future.class);
+                futureList.add(future);
+
+                //Gson提供了fromJson()方法来实现从Json相关对象到Java实体的方法
+            }}catch (Exception e) {
+            e.printStackTrace();
+        }
+        return futureList;
     }
 
 }
